@@ -1,24 +1,22 @@
 Ok, so this is my Binary Immediate Translation System, or BITS
-BITS takes assembly output from other programs (such as radare2, angr, or objdump) #TODO (Currently giving handfed assembly)
+BITS takes assembly output from other programs (such as Ddisasm)
 
-Then it parses it for the instructions,
-Then it converts them from x86_64 to ARM64,
-because why not? We could use it to run AMD64 natively on ARM hardware running a true desktop OS
+Then it parses it for the instructions
+Then it converts them from x86_64 to ARM64
+Because it can be used to run AMD64 programs natively on ARM hardware,
+eliminating the need for virtualization such as QEMU
 
 Examples:
-	ELF   AMD64 GNU/Linux (No ChromeOS)  > ELF   ARM64 GNU/Linux  on ALMOST EVERY ARM Processor (No Android)
-	PE    AMD64 WinDOS	   	     > PE    ARM64 WinDOS     on SELECT ARM (not the RT edition cause that's ironically more locked down than XNU)
-	MACHO AMD64 XNU			     > MACHO ARM64 XNU        on M1/M1-Pro/M1-Max/by-the-time-you're-reading-this,-this-is-old-news
-
-* No GNU/Linux is Linux's REAL name
-* No WinDOS (MS-Windows) is NOT a typo
-* No XNU is MAX OS X's REAL name
+	ELF   AMD64 Linux/BSDs		     > ELF   ARM64 Linux/BSDs
+	PE    AMD64 Windows NT		     > PE    ARM64 Windows NT	
+	MACHO AMD64 XNU			     > MACHO ARM64 XNU
 
 Yes, there are already about 2 tools that can do this.
 But, their binaries suffer terrible performance loss,
-And, their binaries suffer terrible oversizing.
+And, their binaries are terribly oversized.
 
 SO, this tool will "Immediate"ly convert the AMD64 to ARM64 instructions after disassembly.
+It will also store a list of registers used for the same purpose between architectures.
 NO uplifting into LLVM IR! 
 MINIMAL (hopefully nothing) impact on size or performance!
 

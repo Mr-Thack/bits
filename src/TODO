@@ -1,8 +1,7 @@
-1. Make it parse
-2. Make it read
-3. Make simple conversion list
-4. Make translation backends for Radare2, Angr, and Objdump in order
-5. Make translation backends for more stuff
-6. Make nice documentation
-7. Submit to CRTC
-8. Actively develop on srchut or github
+1. Make instruction conversion list
+2. Make register conversion list
+3. Make nice documentation
+4. Submit to CRTC
+5. Rewrite in Rust
+6. Actively develop on srchut or github
+** Hopefully then I'll be useful
