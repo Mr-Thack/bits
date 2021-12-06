@@ -25,12 +25,6 @@ def removeCFI(data):
             outputArray.append(line)
     return outputArray
 
-def modData(data):
-    data = removeComments(data)
-    data = removeWhiteSpace(data)
-    data = removeCFI(data)
-    return data
-
 def condense(array,char):
     data = ""
     # Just adds all the data into 1 string
@@ -47,7 +41,11 @@ def formatSections(sects):
 def parse(fileData):
     parsedData = fileData
     parsedData = parsedData.split('\n') # Split based on new line character
-    parsedData = modData(fileData)
+
+    parsedData = removeComments(parsedData)
+    parsedData = removeWhiteSpace(parsedData)
+    parsedData = removeCFI(parsedData)
+
     sectionData = sections.retrieveSectAddr(parsedData)
 
     # Format data before sending
