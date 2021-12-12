@@ -1,6 +1,0 @@
-#!/bin/bash
-rm -f *.s *.data infofile
-
-if [[ $1 == "bin" ]]; then
-	rm *.bin 
-fi
