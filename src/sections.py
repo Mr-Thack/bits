@@ -22,14 +22,11 @@ def retrieveSectAddr(disArray):
                 # " " (space) and adds 9 to get it's proper address
             else:
                 name=line
-                # so the name is whatever was put in before
-                # ex: .text, .data, .bss
             print("Found section name : ", name)
             start=i
         elif (line.startswith("# end") and name==line[14:]):
             end=i
             nsection=section(name,start,end,data)
-            data="" # Clear data
             print("Found end section: ", name)
             ret.append(nsection)
         elif (not name == ""):
