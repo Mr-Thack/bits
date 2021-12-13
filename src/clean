@@ -1,5 +1,5 @@
 #!/bin/sh
-rm -rf out
+rm -rf out dis.s
 
 if [[ $1 == "bin" ]] ; then
 	rm -rf *.bin

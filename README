@@ -16,8 +16,8 @@ But, their binaries suffer terrible performance loss,
 And, their binaries are terribly oversized.
 
 SO, this tool will "Immediate"ly convert the AMD64 to ARM64 instructions after disassembly.
+No middle step of going through any IR
 It will also store a list of registers used for the same purpose between architectures.
-NO uplifting into LLVM IR! 
 MINIMAL (hopefully nothing) impact on size or performance!
 
 Oh and yes, this was written as part of my Cobb Regional Tech Competition Project

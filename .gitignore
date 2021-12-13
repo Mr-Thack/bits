@@ -1,5 +1,7 @@
 src/__pycache__/*
 src/*.s
+src/out
+src/*.out
 src/*.bin
 src/*.data
 src/infofile
