@@ -3,22 +3,30 @@ import args
 import sys
 
 import fileio
-import parser
+import lexer
 import backend
+import sections
+import common
 
 disassembledFile = "dis.s"
+modFile = "mod.s"
+sectionFile = "sections.data"
+outDir = "out/" # You can change to ./ to make it output into current dir
 
 def main(argv):
     fileName = args.args(argv)
     backend.disassemble(fileName,disassembledFile)
     # Read the disassembled file
     fileData = fileio.readFile(disassembledFile)
-    # Ask parser to do stuff
-    parsedData, sectionData = parser.parse(fileData)
+    # Ask lexer to do extract assembly
+    lexedData = lexer.lex(fileData)
+    # Then use sections to go through and make sections look pretty
+    sectionData = sections.retrieveSectAddr(lexedData)
+
     # writeFile requires pre stringed data
-    fileio.writeFile("mod.s", parsedData)
-    fileio.writeFile("infofile", sectionData)
-    #print("Data is : \n", parsedData)
+    fileio.mkdir(outDir)
+    fileio.writeFile(outDir + modFile, common.sectCondense(sectionData))
+    fileio.writeFile(outDir + sectionFile, common.sectFormat(sectionData))
 
 
 if __name__ == "__main__":
