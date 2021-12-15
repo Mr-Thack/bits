@@ -1,4 +1,6 @@
 # Common.py
+import registers
+import enum
 
 def condense(array,char,alignStart=True):
     # alignStart is for adding char at begining or at end
@@ -48,3 +50,29 @@ def sectCondense(sects):
             args = ""
         text=text+args+condense(i.data,"\n")+"\n"
     return text
+
+# Returns the position of a register in the AMD64Registers array + 1
+# This is because python will treat 0 the same None
+# Basially None = Null
+def findReg(name):
+    for i, reg in enumerate(registers.AMD64Registers):
+        if reg.name == name:
+            #print(reg.name,name)
+            return i + 1
+    return None
+
+## [NOTE] ENUMS ##
+
+# instructArguemnts
+# Enum class for types of arguements for instructions
+class argTypes(enum.Enum):
+    none = 1
+    integer = 2
+    register = 3
+    pointer = 4
+    comp = 5
+
+def isAscii(s): # s stands for string
+    # c stands for character
+    return all(ord(c) < 128 for c in s)
+    # making variables names shorter makes program faster (;
