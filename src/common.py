@@ -1,5 +1,6 @@
 # Common.py
 import registers
+import enum
 
 def condense(array,char,alignStart=True):
     # alignStart is for adding char at begining or at end
@@ -59,3 +60,19 @@ def findReg(name):
             #print(reg.name,name)
             return i + 1
     return None
+
+## [NOTE] ENUMS ##
+
+# instructArguemnts
+# Enum class for types of arguements for instructions
+class argTypes(enum.Enum):
+    none = 1
+    integer = 2
+    register = 3
+    pointer = 4
+    comp = 5
+
+def isAscii(s): # s stands for string
+    # c stands for character
+    return all(ord(c) < 128 for c in s)
+    # making variables names shorter makes program faster (;
