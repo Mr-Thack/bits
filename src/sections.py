@@ -28,7 +28,7 @@ def retrieveSectAddr(disArray):
             if not i==0:
                 end=i
                 if name == "end_section":
-                    data=data+line+"\n"
+                    data.append(line)
                     # Add last line onto end if ending whole file
                 nsection=section(name,start,end,data,args)
                 ret.append(nsection)
@@ -45,7 +45,7 @@ def retrieveSectAddr(disArray):
                 name=""
                 start=0
             end=0
-            data=""
+            data=[]
             # END
 
             # Set name to section's name
@@ -61,7 +61,7 @@ def retrieveSectAddr(disArray):
                 name = "start_section"
                 args=False
                 # Add first line onto begining if starting file
-                data=data+line+"\n"
+                data.append(line)
             elif not name == "end_section" and not i+1==len(disArray):
                 name=line
                 args="NONE"
@@ -71,7 +71,7 @@ def retrieveSectAddr(disArray):
                 print("Found section start", name)
         else:
             # Add line onto data for section
-            data=data+line+"\n"
+            data.append(line)
     for i, sec in enumerate(ret):
         print("Section recorded", sec.name)
     return ret

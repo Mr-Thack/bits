@@ -157,7 +157,7 @@ main:
           .byte 0x2
           .byte 0x0
 .L_2004:
-          .string "Hello!"
+          .string "Hello"
 #===================================
 # end section .rodata
 #===================================

@@ -7,6 +7,7 @@ import lexer
 import backend
 import sections
 import common
+import parser
 
 disassembledFile = "dis.s"
 modFile = "mod.s"
@@ -20,8 +21,11 @@ def main(argv):
     fileData = fileio.readFile(disassembledFile)
     # Ask lexer to do extract assembly
     lexedData = lexer.lex(fileData)
-    # Then use sections to go through and make sections look pretty
+    # Then use sections to go through and retrieve sect addresses
     sectionData = sections.retrieveSectAddr(lexedData)
+    # Then classify all preprocessor instructions
+    # and labels, and processor instructions
+    parsedData = parser.parse(sectionData[common.sectFind(sectionData,".text")].data)
 
     # writeFile requires pre stringed data
     fileio.mkdir(outDir)
