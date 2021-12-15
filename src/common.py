@@ -17,6 +17,7 @@ def condense(array,char,alignStart=True):
     return data
 
 
+# Formats sects for data file
 def sectFormat(sects):
     text=""
     for i in sects:
@@ -25,9 +26,16 @@ def sectFormat(sects):
             args=condense(i.args,",",)
         else:
             args="NONE"
-        text=text+"Name: "+i.name+"\nArgs:"+args+"\nStart: "+str(i.start)+"\nEnd: "+str(i.end)+"\n{\n"+i.data+"}\n\n"
+        text=text+"Name: "+i.name+"\nArgs:"+args+"\nStart: "+str(i.start)+"\nEnd: "+str(i.end)+"\n{\n"+condense(i.data,"\n")+"\n}\n\n"
     return text
 
+# Finds number of wanted section
+def sectFind(sects, sectName):
+    for i, sect in enumerate(sects):
+        if sect.name == sectName:
+            return i
+
+# Condenses sect for assembly file
 def sectCondense(sects):
     text=""
     for i in sects:
@@ -38,5 +46,5 @@ def sectCondense(sects):
             args=args+"\n"
         else:
             args = ""
-        text=text+args+i.data
+        text=text+args+condense(i.data,"\n")+"\n"
     return text

@@ -1,5 +1,9 @@
+0.1. Make Parser to parse into array
+0.2. Make Parser parse into assembler instructions
+	and cpu instructions
+0.3. Make register conversion list
+0.4. Make complex operand converter
 1. Make instruction conversion list
-2. Make register conversion list
 3. Make nice documentation
 4. Submit to CRTC
 5. Rewrite in Rust

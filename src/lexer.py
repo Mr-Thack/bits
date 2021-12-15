@@ -1,5 +1,4 @@
-# Parser : parses the disassembly output to remove unneeded information
-#   Then sets it up as an array of a class
+# Lexer : lexes the disassembly output to put it into an array
 
 def removeComments(data):
     outputArray = []
