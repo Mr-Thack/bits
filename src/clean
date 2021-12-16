@@ -1,5 +1,5 @@
 #!/bin/sh
-rm -rf out dis.s
+rm -rf out *.s *.data
 
 if [[ $1 == "bin" ]] ; then
 	rm -rf *.bin

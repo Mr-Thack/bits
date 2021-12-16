@@ -2,6 +2,16 @@ import sys
 import os
 import shutil
 
+files = {
+    "disFile" : "dis.s",
+    "modFile" : "mod.s",
+    "sectFile" : "sections.data"
+}
+
+def setFileLocation(outDir):
+    for i, prop in enumerate(files):
+        files[prop] = outDir+prop
+
 def mkdir(dirName):
     doesExist = os.path.exists(dirName)
     if (doesExist == True):
