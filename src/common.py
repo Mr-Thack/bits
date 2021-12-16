@@ -63,7 +63,7 @@ def findReg(name):
 
 ## [NOTE] ENUMS ##
 
-# instructArguemnts
+# instructArguements
 # Enum class for types of arguements for instructions
 class argTypes(enum.Enum):
     none = 1

@@ -2,35 +2,48 @@
 import args
 import sys
 
-import fileio
+import files as files
 import lexer
 import backend
 import sections
 import common
 import parser
 
-disassembledFile = "dis.s"
-modFile = "mod.s"
-sectionFile = "sections.data"
-outDir = "out/" # You can change to ./ to make it output into current dir
+outDir = "out/"
+"""
+You can change to ./ to make it output all files into current dir
+But, you'll need a / at the end for it to work
+"""
+
 
 def main(argv):
     fileName = args.args(argv)
-    backend.disassemble(fileName,disassembledFile)
+
+    files.setFileLocation(outDir)
+
+    # Make the outDir for all created files to be in
+    files.mkdir(fileio.outDir)
+
+    # Send the name of the disFile to the disassembler
+    backend.disassemble(fileName,files.files["disFile"])
+
     # Read the disassembled file
-    fileData = fileio.readFile(disassembledFile)
+    fileData = files.readFile(fileio.files["disFile"])
+
     # Ask lexer to do extract assembly
     lexedData = lexer.lex(fileData)
+
     # Then use sections to go through and retrieve sect addresses
     sectionData = sections.retrieveSectAddr(lexedData)
+
     # Then classify all preprocessor instructions
     # and labels, and processor instructions
     parsedData = parser.parse(sectionData[common.sectFind(sectionData,".text")].data)
 
     # writeFile requires pre stringed data
-    fileio.mkdir(outDir)
-    fileio.writeFile(outDir + modFile, common.sectCondense(sectionData))
-    fileio.writeFile(outDir + sectionFile, common.sectFormat(sectionData))
+    #print(files.files["modFile"])
+    files.writeFile(fileio.files["modFile"], common.sectCondense(sectionData))
+    files.writeFile(fileio.files["sectFile"], common.sectFormat(sectionData))
 
 
 if __name__ == "__main__":
