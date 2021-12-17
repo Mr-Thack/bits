@@ -47,8 +47,11 @@ def parse(sectData):
             if ins == argLine:
                 # [NOTE] Due to how python deals with strings,
                 # if nothing is found and I add one, I get the first term back
-                # try making a better method of doing this later
-                argLine = None
+                # try making a better method of finding if there's no arg later
+                newArgNone = arguement(None, common.argTypes.none)
+                # Make arg, make instruct, then append onto parsedData array
+                newInstruction = instruction(ins,[newArgNone])
+                parsedData.append(newInstruction)
             else:
                 argLine = argLine.split(",")
                 # Commas split each arg
@@ -75,10 +78,10 @@ def parse(sectData):
                             else: # Must be a pointer or a dereferenced pointer
                                 newArgPoint = arguement(arg, common.argTypes.pointer)
                                 args.append(newArgPoint)
+                                print("WARNING: this might be a new data type: [parser.py]", arg)
 
                 newInstruction = instruction(ins,args)
                 parsedData.append(newInstruction)
-    deparse(parsedData)
 
     return parsedData
 
@@ -97,9 +100,10 @@ def deparsePreProc(preProc):
 
 def deparseInstruction(instruct):
     argLine = instruct.ins + " "
+
     for i, arg in enumerate(instruct.args):
         if arg.argType == common.argTypes.none:
-            argLine = ""
+            argLine = instruct.ins
         elif arg.argType == common.argTypes.integer:
             argLine = argLine + str(arg.data)
         elif arg.argType == common.argTypes.register:
@@ -117,18 +121,17 @@ def deparseInstruction(instruct):
     return argLine
 
 def deparse(sectArray):
-    newData = ""
-
+    newData = []
     for l, line in enumerate(sectArray):
         if type(line) == label:
-            newData=newData+deparseLabel(line)
+            newData.append(deparseLabel(line))
         elif type(line) == preProc:
-            newData=newData+deparsePreProc(line)
+            newData.append(deparsePreProc(line))
         elif type(line) == instruction:
-            newData=newData+deparseInstruction(line)
+            newData.append(deparseInstruction(line))
         else:
             print("Support for ", type(line), " not added for ", line, "!")
-        newData=newData+"\n" # Add new line on to the end
-    print( newData)
+
+    return newData
 
 

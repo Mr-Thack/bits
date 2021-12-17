@@ -57,7 +57,6 @@ def sectCondense(sects):
 def findReg(name):
     for i, reg in enumerate(registers.AMD64Registers):
         if reg.name == name:
-            #print(reg.name,name)
             return i + 1
     return None
 

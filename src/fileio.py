@@ -2,15 +2,18 @@ import sys
 import os
 import shutil
 
+
+# Change outDir to "./" to make it come out in cur work dir
+# The / is required at the end
+outDir = "out/"
 files = {
     "disFile" : "dis.s",
     "modFile" : "mod.s",
     "sectFile" : "sections.data"
 }
 
-def setFileLocation(outDir):
-    for i, prop in enumerate(files):
-        files[prop] = outDir+prop
+for i, prop in enumerate(files):
+    files[prop] = outDir+files[prop]
 
 def mkdir(dirName):
     doesExist = os.path.exists(dirName)
