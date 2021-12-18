@@ -2,6 +2,36 @@
 import registers
 import enum
 
+class preProc:
+    def __init__(self,ins,args):
+        self.ins = ins
+        self.args = args
+        self.length = len(args)
+
+class label:
+    def __init__(self,name):
+        self.name = name
+
+class arguement:
+    def __init__(self, data, argType):
+        self.data = data
+        self.argType = argType
+
+class compArgRegPoint:
+    # Operation can be a string of "+", "-", "*", or "/"
+    def __init__(self,register,operation,pointer,isDereferenced):
+        self.register = register
+        self.operation = operation
+        self.pointer = pointer
+        self.isDereferenced = isDereferenced
+        self.argType = argTypes.comp
+
+class instruction:
+    def __init__(self,ins,args):
+        self.ins = ins
+        self.args = args
+        self.length = len(args)
+
 def condense(array,char,alignStart=True):
     # alignStart is for adding char at begining or at end
     data = ""
@@ -55,12 +85,11 @@ def sectCondense(sects):
 # This is because python will treat 0 the same None
 # Basially None = Null
 def findReg(name):
-    for i, reg in enumerate(registers.AMD64Registers):
+    for i, reg in enumerate(registers.registers):
         if reg.name == name:
             return i + 1
+    print("POTENTIAL ERROR: Register not found", name, "[common.py 91]")
     return None
-
-## [NOTE] ENUMS ##
 
 # instructArguements
 # Enum class for types of arguements for instructions
@@ -69,7 +98,8 @@ class argTypes(enum.Enum):
     integer = 2
     register = 3
     pointer = 4
-    comp = 5
+    derefRegPlusPointer = 5
+    comp = 6
 
 def isAscii(s): # s stands for string
     # c stands for character

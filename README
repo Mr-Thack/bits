@@ -24,4 +24,4 @@ Oh and yes, this was written as part of my Cobb Regional Tech Competition Projec
 This is actually the Prototype README
 
 Currently in Python for funsies,
-Will rewrite in Rust later for more performance!
+Will rewrite in Rust (or maybe Datalog) later for more performance!
