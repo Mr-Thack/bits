@@ -12,5 +12,6 @@ registers = [
     reg("RAX","x0",64), # In SYS V AMD64 EABI, RAX is first return
     reg("RDI","x0",64), # and RDI is first paramter, this will be confusing to redo in ARM
     reg("EAX","w0",32),
-    reg("RIP","pc",64)
+    reg("RIP","pc",64),
+
 ]

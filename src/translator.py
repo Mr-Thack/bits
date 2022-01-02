@@ -32,13 +32,23 @@ def translateArgs(dataArray):
         else:
             newDataArray.append(line)
 
-    #print(newDataArray)
-
-
     return newDataArray
+
+def translateIns(dataArray):
+    newDataArray = []
+    for l, line in enumerate(dataArray):
+        if type(line) == common.instruction:
+            newArgs = []
+            if line.ins == "pop":
+                line.ins = "stp"
+                newArgs.append(line.args[0])
+                newReg = registers.registers[findReg("
+
+    return dataArray
 
 def translate(dataArray):
     newDataArray = []
     newDataArray = translateArgs(dataArray)
+    newDataArray = translateIns(dataArray)
 
     return newDataArray
