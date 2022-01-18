@@ -1,27 +1,21 @@
 Ok, so this is my Binary Immediate Translation System, or BITS
 BITS takes assembly output from other programs (such as Ddisasm)
 
-Then it parses it for the instructions
-Then it converts them from x86_64 to ARM64
-Because it can be used to run AMD64 programs natively on ARM hardware,
-eliminating the need for virtualization such as QEMU
+Then it parses it for the instructions, registers, etc.
+Then it converts them from x86_64 to ARM64.
+Then it does any weird last minute fixed that's required.
 
-Examples:
-	ELF   AMD64 Linux/BSDs		     > ELF   ARM64 Linux/BSDs
-	PE    AMD64 Windows NT		     > PE    ARM64 Windows NT	
-	MACHO AMD64 XNU			     > MACHO ARM64 XNU
+It can be used to run AMD64 programs natively on ARM hardware,
+eliminating the need for virtualization such as QEMU.
 
-Yes, there are already about 2 tools that can do this.
-But, their binaries suffer terrible performance loss,
-And, their binaries are terribly oversized.
+Currently only has basic support for System V ABI (Specifically Linux).
 
 SO, this tool will "Immediate"ly convert the AMD64 to ARM64 instructions after disassembly.
-No middle step of going through any IR
-It will also store a list of registers used for the same purpose between architectures.
-MINIMAL (hopefully nothing) impact on size or performance!
+No middle step of going through any Intermediate Representation, 
+which means that it can't translate to other architectures,
+but it's super good at x64->ARM.
 
-Oh and yes, this was written as part of my Cobb Regional Tech Competition Project
-This is actually the Prototype README
+MINIMAL impact on size or performance!
 
-Currently in Python for funsies,
-Will rewrite in Rust (or maybe Datalog) later for more performance!
+Currently in Python for simplicity,
+Will finish rewrite in Haskell (and maybe Datalog) later because it's cleaner and better than the Python version.

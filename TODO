@@ -1,9 +1,4 @@
-0.2. Finish Haskell Translate
-0.3. Make register conversion list
-0.4. Make complex operand converter
-1. Make instruction conversion list
+//0.2. Finish Haskell Translate
+1. Stop it from Crashing
+2. Get translator working again
 3. Make nice documentation
-4. Submit to CRTC
-5. Rewrite in Rust, or maybe Datalog
-6. Actively develop on srchut or github
-** Hopefully then I'll be useful
