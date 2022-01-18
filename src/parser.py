@@ -57,6 +57,7 @@ def parse(sectData):
                                 # [TODO] Finish parse complex arg before appending it into array
                                 argData = arg.split(" ")
                                 newArgData = ""
+
                                 for p, part in enumerate(argData):
                                     for w, word in enumerate(verboseCompArgs):
                                         # Removes verbose args that will be figured out by register size
@@ -114,29 +115,27 @@ def deparseInstruction(instruct,curArchitecture):
             argLine = argLine + str(arg.data)
         elif arg.argType == common.argTypes.register:
             if curArchitecture == "AMD64":
-                print("ARCH AMD^$")
                 argLine = argLine + str(arg.data.name)
             elif curArchitecture == "ARM64":
                 argLine = argLine + str(arg.data.equiv)
         elif arg.argType == common.argTypes.pointer:
             argLine = argLine + str(arg.data)
         elif arg.argType == common.argTypes.comp:
-            print(type(arg), "ERROR MIGHT OCCUR: GO TO PARSER.PY 120")
-            if type(arg) == common.compArgRegPoint:
+            print("ERROR MIGHT OCCUR: GO TO PARSER.PY deparseInstruction()")
+            if type(arg.data) == common.compArgRegPoint:
                 extraStartChar = ""
                 extraEndChar = ""
                 reg = ""
-
                 if curArchitecture == "AMD64":
-                    reg = str(arg.register.name)
+                    reg = str(arg.data.register.name)
                 elif curArchitecture == "ARM64":
                     reg = str(arg.register.equiv)
 
-                if arg.isDereferenced == True:
+                if arg.data.isDereferenced == True:
                     extraStartChar = "["
                     extraEndChar = "]"
 
-                argLine = argLine + extraStartChar + reg + arg.operation + str(arg.pointer) + str(extraEndChar)
+                argLine = argLine + extraStartChar + reg + arg.data.operation + str(arg.data.pointer) + str(extraEndChar)
             # [TODO] Finish making this actually do something
         else:
             print("Support for ", arg.argType, " not added in arguement types!")
