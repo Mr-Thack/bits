@@ -32,7 +32,7 @@ def retrieveSectAddr(disArray):
                     # Add last line onto end if ending whole file
                 nsection=section(name,start,end,data,args)
                 ret.append(nsection)
-                print("Found section end", name)
+                print("Found section end  ", name)
 
             # Clear vars
             # [BUG] won't work if .bss isn't last section

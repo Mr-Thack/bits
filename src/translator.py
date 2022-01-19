@@ -2,6 +2,7 @@
 
 import common
 import registers
+import instructions
 
 def deparsePreProc(preProc):
     args = common.condense(preProc.args,", ")
@@ -25,7 +26,7 @@ def translateArgs(dataArray):
                             arg.data.operation,
                             arg.data.pointer,
                             arg.data.isDereferenced))
-                        print("THIS", argLine[len(argLine)-1].register)
+                        print("translator.py : translateArgs() THIS", argLine[len(argLine)-1].register)
                 else:
                     argLine.append(arg)
             newDataArray.append(common.instruction(line.ins,argLine))
@@ -42,8 +43,7 @@ def translateIns(dataArray):
             if line.ins == "pop":
                 line.ins = "stp"
                 newArgs.append(line.args[0])
-                newReg = registers.registers[findReg("
-
+                newReg = registers.registers[findReg("")]
     return dataArray
 
 def translate(dataArray):

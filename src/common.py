@@ -17,14 +17,26 @@ class arguement:
         self.data = data
         self.argType = argType
 
+class argReg:
+    def __init__(self,reg,isPointing=False):
+        self.reg = reg
+        self.isPointing = isPointing
+
 class compArgRegPoint:
     # Operation can be a string of "+", "-", "*", or "/"
-    def __init__(self,register,operation,pointer,isDereferenced):
+    # computeArgument Register Pointer (AKA label such as ".L_2004")
+    def __init__(self,register,operation,pointer,isDereferenced=False):
         self.register = register
         self.operation = operation
         self.pointer = pointer
         self.isDereferenced = isDereferenced
         self.argType = argTypes.comp
+
+class compArgRegInt:
+    def __init__(self,register,operation,integer):
+        self.register = register
+        self.operation = operation
+        self.integer = integer
 
 class instruction:
     def __init__(self,ins,args):
@@ -88,8 +100,15 @@ def findReg(name):
     for i, reg in enumerate(registers.registers):
         if reg.name == name:
             return i + 1
-    print("POTENTIAL ERROR: Register not found", name, "[common.py 91]")
+    print("WARNING [MAYBE UNIMPLEMENTED]: Register not found", name, "[common.py 91]")
     return None
+
+def getReg(name):
+    res = findReg(name)
+    if res:
+        return registers.registers[res-1]
+    else:
+        return None
 
 # instructArguements
 # Enum class for types of arguements for instructions

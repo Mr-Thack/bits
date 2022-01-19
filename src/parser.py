@@ -44,9 +44,9 @@ def parse(sectData):
                         newArgInt = common.arguement(int(arg),common.argTypes.integer)
                         args.append(newArgInt)
                     else:
-                        result = common.findReg(arg)
+                        result = common.getReg(arg)
                         if result: # See if arg is a register, and if so:
-                            newArgReg = common.arguement(registers.registers[result-1], common.argTypes.register)
+                            newArgReg = common.arguement(result, common.argTypes.register)
                             args.append(newArgReg)
                         elif common.isAscii(arg): # Must be a label
                             # [NOTE] Checking for string is after checking for register
@@ -77,20 +77,21 @@ def parse(sectData):
 
                                 if newArgData.find("+"):
                                     newArgData = newArgData.split("+")
-                                    result = common.findReg(newArgData[0])
-                                    arg = common.compArgRegPoint(
-                                        registers.registers[result-1], "+", newArgData[1], isDereferenced)
+                                    register = common.getReg(newArgData[0])
+                                    # Returns None if None found
+                                    if result:
+                                        arg = common.compArgRegPoint(
+                                            register, "+", newArgData[1], isDereferenced)
 
                                 newArgComplex = common.arguement(arg, common.argTypes.comp)
                                 args.append(newArgComplex)
                             else: # Must be a pointer or a dereferenced pointer
                                 newArgPoint = common.arguement(arg, common.argTypes.pointer)
                                 args.append(newArgPoint)
-                                print("WARNING: this might be a new data type: [parser.py]", arg)
+                                print("WARNING [MAYBE UNIMPLEMENTED]: this might be a new data type: [parser.py]", arg)
 
                 newInstruction = common.instruction(ins,args)
                 parsedData.append(newInstruction)
-
     return parsedData
 
 # Return label name + :
@@ -121,7 +122,7 @@ def deparseInstruction(instruct,curArchitecture):
         elif arg.argType == common.argTypes.pointer:
             argLine = argLine + str(arg.data)
         elif arg.argType == common.argTypes.comp:
-            print("ERROR MIGHT OCCUR: GO TO PARSER.PY deparseInstruction()")
+            print("WARNING [UNSTABLE]: [parser.py] deparseInstruction() (complex args)")
             if type(arg.data) == common.compArgRegPoint:
                 extraStartChar = ""
                 extraEndChar = ""

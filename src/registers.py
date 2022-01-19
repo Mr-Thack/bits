@@ -9,9 +9,12 @@ class reg:
 registers = [
     reg("RBP","fp",64),
     reg("RSP","sp",64),
-    reg("RAX","x0",64), # In SYS V AMD64 EABI, RAX is first return
-    reg("RDI","x0",64), # and RDI is first paramter, this will be confusing to redo in ARM
+    reg("RAX","x18",64),
     reg("EAX","w0",32),
+    reg("RDI","x0",64),
+    # In SYS V Architecture, RAX is first return
+    # and RDI is first paramter,
+    # so, I decided to just dump return in x18
     reg("RIP","pc",64),
 
 ]
