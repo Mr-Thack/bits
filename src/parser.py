@@ -2,7 +2,8 @@
 
 import sys
 import common
-import registers
+import registers# Call translate.translate()
+import warnings
 
 verboseCompArgs = ["QWORD", "PTR"]
 
@@ -55,9 +56,11 @@ def parse(sectData):
                             if " " in arg or "+" in arg or "-" in arg or "*" in arg or "/" in arg:
                                 # Must be a complex, because all of these complexes have space
                                 # [TODO] Finish parse complex arg before appending it into array
+                                compType = common.argTypes.comp # This is the type of comp arg
                                 argData = arg.split(" ")
                                 newArgData = ""
 
+                                # Get rid of verbose pieces
                                 for p, part in enumerate(argData):
                                     for w, word in enumerate(verboseCompArgs):
                                         # Removes verbose args that will be figured out by register size
@@ -67,6 +70,7 @@ def parse(sectData):
                                     if not part == None:
                                         # If not found, then append
                                         newArgData = newArgData + part
+
                                 # Above should return a string if all went fine
                                 # [TODO] Add code for "-", "*" and "/"
                                 isDereferenced = False
@@ -75,21 +79,22 @@ def parse(sectData):
                                     isDereferenced = True
                                     newArgData = newArgData[1:len(newArgData)-1]
 
+                                # [TODO] Clean this stuff up
+                                # It won't work for other types of comp args
                                 if newArgData.find("+"):
                                     newArgData = newArgData.split("+")
                                     register = common.getReg(newArgData[0])
-                                    # Returns None if None found
-                                    if result:
+                                    if result != -1:
+                                        compType = common.argTypes.compArgRegPoint
                                         arg = common.compArgRegPoint(
-                                            register, "+", newArgData[1], isDereferenced)
+                                            register, "+", common.pointer(newArgData[1]), isDereferenced)
 
-                                newArgComplex = common.arguement(arg, common.argTypes.comp)
+                                newArgComplex = common.arguement(arg, compType)
                                 args.append(newArgComplex)
                             else: # Must be a pointer or a dereferenced pointer
                                 newArgPoint = common.arguement(arg, common.argTypes.pointer)
                                 args.append(newArgPoint)
                                 print("WARNING [MAYBE UNIMPLEMENTED]: this might be a new data type: [parser.py]", arg)
-
                 newInstruction = common.instruction(ins,args)
                 parsedData.append(newInstruction)
     return parsedData
@@ -121,25 +126,35 @@ def deparseInstruction(instruct,curArchitecture):
                 argLine = argLine + str(arg.data.equiv)
         elif arg.argType == common.argTypes.pointer:
             argLine = argLine + str(arg.data)
-        elif arg.argType == common.argTypes.comp:
-            print("WARNING [UNSTABLE]: [parser.py] deparseInstruction() (complex args)")
-            if type(arg.data) == common.compArgRegPoint:
-                extraStartChar = ""
-                extraEndChar = ""
-                reg = ""
-                if curArchitecture == "AMD64":
-                    reg = str(arg.data.register.name)
-                elif curArchitecture == "ARM64":
-                    reg = str(arg.register.equiv)
+        elif arg.argType == common.argTypes.compArgRegPoint or common.argTypes.compArgRegInt:
+            # The above classes are quite similar
+            # So we can do some similar things to them
+            extraStartChar = ""
+            extraEndChar = ""
+            reg = ""
+            sndPiece = ""
+            # This is the 2nd piece,
+            # So a pointer or an integer
 
-                if arg.data.isDereferenced == True:
-                    extraStartChar = "["
-                    extraEndChar = "]"
+            if arg.argType == common.argTypes.compArgRegPoint:
+                sndPiece = str(arg.data.pointer)
+            elif arg.argType == common.argTypes.compArgRegInt:
+                sndPiece = str(arg.data.integer)
 
-                argLine = argLine + extraStartChar + reg + arg.data.operation + str(arg.data.pointer) + str(extraEndChar)
+            if curArchitecture == "AMD64":
+                reg = str(arg.data.register.name)
+            elif curArchitecture == "ARM64":
+                reg = str(arg.data.register.equiv)
+
+            if arg.data.isDereferenced == True:
+                extraStartChar = "["
+                extraEndChar = "]"
+
+            argLine = argLine + extraStartChar + reg + arg.data.operation + sndPiece + extraEndChar
             # [TODO] Finish making this actually do something
         else:
-            print("Support for ", arg.argType, " not added in arguement types!")
+            print("Support for ", arg.argType)
+            warnings.warn("^ not yet added in the parser!!!", UserWarning)
             sys.exit(1)
         if not i + 1 == len(instruct.args):
             argLine = argLine + ", "

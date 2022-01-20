@@ -6,7 +6,12 @@ def removeComments(data):
     for i, line in enumerate(data):
         # Keep only lines that have a comment and end section ...
         if (not line.startswith("#")):
-            outputArray.append(line)
+            if line.find("@"):
+                # I guess the @ is also a comment
+                # Might as well remove it if found
+                outputArray.append(line.split("@")[0])
+            else:
+                outputArray.append(line)
     return outputArray
 
 def removeWhiteSpace(data):
@@ -23,6 +28,16 @@ def removeCFI(data):
             outputArray.append(line)
     return outputArray
 
+# [BUG] This is a me issue
+# Remove it soon
+def removeInstructionsIDontWant(data):
+    outputArray = []
+    for i, line in enumerate(data):
+        if line.find("nop") == -1:
+            outputArray.append(line)
+    return outputArray
+
+
 def lex(fileData):
     lexedData = fileData
     lexedData = lexedData.split('\n') # Split based on new line character
@@ -30,5 +45,6 @@ def lex(fileData):
     lexedData = removeComments(lexedData)
     lexedData = removeWhiteSpace(lexedData)
     lexedData = removeCFI(lexedData)
+    lexedData = removeInstructionsIDontWant(lexedData)
 
     return lexedData

@@ -3,7 +3,9 @@
 import common
 import registers
 import instructions
+import warnings
 
+"""
 def deparsePreProc(preProc):
     args = common.condense(preProc.args,", ")
     args = args[:len(args)-1]
@@ -34,21 +36,62 @@ def translateArgs(dataArray):
             newDataArray.append(line)
 
     return newDataArray
+"""
 
-def translateIns(dataArray):
-    newDataArray = []
-    for l, line in enumerate(dataArray):
-        if type(line) == common.instruction:
-            newArgs = []
-            if line.ins == "pop":
-                line.ins = "stp"
-                newArgs.append(line.args[0])
-                newReg = registers.registers[findReg("")]
-    return dataArray
+def translateIns(line):
+    ret = []
+    # [NOTE] The transrules found in instructions
+    # Do not follow the rules in the rest of the program
+    # The transrules DO NOT wrap the argument in common.arguement
+
+    # Will be an array of instructions
+    # These will be derived from the rules
+    for r, rule in enumerate(instructions.instructions):
+        # Try to match the instruction to conversion rules
+        if line.ins == rule.amd.ins:
+            orgargs = line.args
+            for c, clause in enumerate(rule.arm):
+                newArgs = []
+                for a, arg in enumerate(clause.args):
+                    # For all args, check if is string and has $
+                    argType = None
+                    newArg = None
+                    if type(arg) == str:
+                        if arg.find("$") != -1:
+                            index = int(arg[arg.find("$")+1])
+                            # If not found (because -1 is found)
+                            if arg.find("@") != -1:
+                                #property is 2nd part
+                                prop = arg.split("@")[1]
+                                argType = getattr(common.argTypes,prop)
+                                newArg = common.arguement(getattr(orgargs[index-1].data,prop),argType)
+                            else:
+                                # Set arg to that index of orgargs
+                                newArg = orgargs[index-1]
+                                argType = newArg.argType
+                    else:
+                        newArg = arg
+                        argType = common.typeToEnum(arg)
+                    if type(newArg) == common.arguement:
+                        # If the newArg is already an argument,
+                        # Remove one argument layer wrapper,
+                        # and we'll be good to go
+                        warnings.warn("Might be an issue")
+                        newArg = newArg.data
+                    newArgs.append(common.arguement(newArg,argType))
+                ret.append(common.instruction(clause.ins,newArgs))
+    return ret
 
 def translate(dataArray):
     newDataArray = []
-    newDataArray = translateArgs(dataArray)
-    newDataArray = translateIns(dataArray)
+    for l, line in enumerate(dataArray):
+        # for line in dataArray, if it's an instruction
+        if type(line) == common.instruction:
+            newInstructions = translateIns(line)
+            # This will return an array
+            # So in the next loop we'll append things onto the newDataArray piece by piece
+            for i, ins in enumerate(newInstructions):
+                newDataArray.append(ins)
 
     return newDataArray
+

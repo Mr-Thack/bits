@@ -1,6 +1,7 @@
 # Common.py
 import registers
 import enum
+import warnings
 
 class preProc:
     def __init__(self,ins,args):
@@ -12,13 +13,19 @@ class label:
     def __init__(self,name):
         self.name = name
 
+class pointer:
+    def __init__(self,name,isDereferenced=True):
+        self.name = name
+        self.isDereferenced = isDereferenced
+
 class arguement:
     def __init__(self, data, argType):
         self.data = data
         self.argType = argType
 
-class argReg:
+class register:
     def __init__(self,reg,isPointing=False):
+        print("Using",reg)
         self.reg = reg
         self.isPointing = isPointing
 
@@ -30,13 +37,13 @@ class compArgRegPoint:
         self.operation = operation
         self.pointer = pointer
         self.isDereferenced = isDereferenced
-        self.argType = argTypes.comp
 
 class compArgRegInt:
-    def __init__(self,register,operation,integer):
+    def __init__(self,register,operation,integer,isDereferenced=False):
         self.register = register
         self.operation = operation
         self.integer = integer
+        self.isDereferenced = isDereferenced
 
 class instruction:
     def __init__(self,ins,args):
@@ -117,8 +124,26 @@ class argTypes(enum.Enum):
     integer = 2
     register = 3
     pointer = 4
-    derefRegPlusPointer = 5
-    comp = 6
+    compArgRegInt = 5
+    compArgRegPoint = 6
+    comp = 7 # Reserved in case of issue
+
+def typeToEnum(obj):
+    # [NOTE]
+    # Only implement what I actually need
+    # So, no pointer or register or integer, if I don't need them
+    if type(obj) == compArgRegInt:
+        return argTypes.compArgRegInt
+    elif type(obj) == compArgRegPoint:
+        return argTypes.compArgRegPoint
+    elif type(obj) == registers.reg:
+        return argTypes.register
+    elif type(obj) == int:
+        return argTypes.integer
+    else:
+        print("Issue with", obj)
+        warnings.warn("Most likely an uninmplemented error",FutureWarning)
+        return None
 
 def isAscii(s): # s stands for string
     # c stands for character

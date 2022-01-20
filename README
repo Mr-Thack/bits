@@ -19,3 +19,9 @@ MINIMAL impact on size or performance!
 
 Currently in Python for simplicity,
 Will finish rewrite in Haskell (and maybe Datalog) later because it's cleaner and better than the Python version.
+
+TO RUN:
+go to src/
+do a ``./run main.bin``
+or substitute main.bin for a binary
+or do ``python main.py -f main.bin``
