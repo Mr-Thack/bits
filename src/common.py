@@ -23,10 +23,16 @@ class arguement:
         self.data = data
         self.argType = argType
 
+# This register is an argument register
+# It is NOT a register rule,
+# which could be found in registers.register
 class register:
-    def __init__(self,reg,isPointing=False):
-        print("Using",reg)
-        self.reg = reg
+    # In other places, it says isDereferenced
+    # Here it says isPointing because a register is not a reference
+    def __init__(self,name,isPointing=False):
+        # It will automatically convert the string, eg "RAX"
+        # into a register.register
+        self.reg = getReg(name)
         self.isPointing = isPointing
 
 class compArgRegPoint:
@@ -107,7 +113,8 @@ def findReg(name):
     for i, reg in enumerate(registers.registers):
         if reg.name == name:
             return i + 1
-    print("WARNING [MAYBE UNIMPLEMENTED]: Register not found", name, "[common.py 91]")
+    print("Register", name, "not found")
+    warnings.warn("^ Maybe unimplemented?")
     return None
 
 def getReg(name):
@@ -136,7 +143,7 @@ def typeToEnum(obj):
         return argTypes.compArgRegInt
     elif type(obj) == compArgRegPoint:
         return argTypes.compArgRegPoint
-    elif type(obj) == registers.reg:
+    elif type(obj) == register:
         return argTypes.register
     elif type(obj) == int:
         return argTypes.integer

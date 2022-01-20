@@ -63,6 +63,8 @@ def translateIns(line):
                             if arg.find("@") != -1:
                                 #property is 2nd part
                                 prop = arg.split("@")[1]
+                                # IF there is an error somewhere around here
+                                # That's because my type checking system is not yet implemented
                                 argType = getattr(common.argTypes,prop)
                                 newArg = common.arguement(getattr(orgargs[index-1].data,prop),argType)
                             else:
@@ -87,7 +89,10 @@ def translate(dataArray):
     for l, line in enumerate(dataArray):
         # for line in dataArray, if it's an instruction
         if type(line) == common.instruction:
+            if line.ins == "lea":
+                print(type(line.args[1].data))
             newInstructions = translateIns(line)
+
             # This will return an array
             # So in the next loop we'll append things onto the newDataArray piece by piece
             for i, ins in enumerate(newInstructions):

@@ -45,9 +45,9 @@ def parse(sectData):
                         newArgInt = common.arguement(int(arg),common.argTypes.integer)
                         args.append(newArgInt)
                     else:
-                        result = common.getReg(arg)
-                        if result: # See if arg is a register, and if so:
-                            newArgReg = common.arguement(result, common.argTypes.register)
+                        result = common.findReg(arg)
+                        if result != None: # See if arg is a register, and if so:
+                            newArgReg = common.arguement(common.register(arg), common.argTypes.register)
                             args.append(newArgReg)
                         elif common.isAscii(arg): # Must be a label
                             # [NOTE] Checking for string is after checking for register
@@ -83,11 +83,18 @@ def parse(sectData):
                                 # It won't work for other types of comp args
                                 if newArgData.find("+"):
                                     newArgData = newArgData.split("+")
-                                    register = common.getReg(newArgData[0])
-                                    if result != -1:
+                                    register = common.findReg(newArgData[0])
+                                    print("Data is",newArgData[0],result)
+                                    if result == None:
+                                        # [BUG] for example QWORD PTR RAX
+                                        # it's stupid and will only take the RAX
+                                        # because we're simple looking for not found
+                                        # We should look for '0'
+                                        # But I'm afraid this might break things
+                                        # Guess I'm trying it anyways
                                         compType = common.argTypes.compArgRegPoint
                                         arg = common.compArgRegPoint(
-                                            register, "+", common.pointer(newArgData[1]), isDereferenced)
+                                            common.register(newArgData[0]), "+", common.pointer(newArgData[1]), isDereferenced)
 
                                 newArgComplex = common.arguement(arg, compType)
                                 args.append(newArgComplex)
