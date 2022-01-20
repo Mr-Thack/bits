@@ -91,10 +91,13 @@ def parse(sectData):
 
                                 newArgComplex = common.arguement(arg, compType)
                                 args.append(newArgComplex)
-                            else: # Must be a pointer or a dereferenced pointer
+                            else:
+                                # Must be a pointer or a dereferenced pointer
+                                # AKA a label
                                 newArgPoint = common.arguement(arg, common.argTypes.pointer)
                                 args.append(newArgPoint)
-                                print("WARNING [MAYBE UNIMPLEMENTED]: this might be a new data type: [parser.py]", arg)
+                                print(arg)
+                                warnings.warn("This might be a new data type: ^ ")
                 newInstruction = common.instruction(ins,args)
                 parsedData.append(newInstruction)
     return parsedData
@@ -146,11 +149,16 @@ def deparseInstruction(instruct,curArchitecture):
             elif curArchitecture == "ARM64":
                 reg = str(arg.data.reg.reg.equiv)
 
-            if arg.data.isDereferenced == True:
+            if arg.data.isDereferenced:
                 extraStartChar = "["
                 extraEndChar = "]"
+                if arg.data.isPreincrement:
+                    extraEndChar = "]!"
 
-            argLine = argLine + extraStartChar + reg + arg.data.operation + sndPiece + extraEndChar
+            if arg.data.isPreincrement:
+                argLine = argLine + extraStartChar + reg + "," + arg.data.operation + sndPiece + extraEndChar
+            else:
+                argLine = argLine + extraStartChar + reg + extraEndChar + "," + arg.data.operation + sndPiece
             # [TODO] Finish making this actually do something
         else:
             print("Support for ", arg.argType)

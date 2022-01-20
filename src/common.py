@@ -45,10 +45,13 @@ class compArgRegPoint:
         self.isDereferenced = isDereferenced
 
 class compArgRegInt:
-    def __init__(self,reg,operation,integer,isDereferenced=False):
+    # Pre-increment looks like [sp, 16]!
+    # and Post-increment looks like [sp], 16
+    def __init__(self,reg,operation,integer,isPreincrement=False, isDereferenced=False):
         self.reg = reg
         self.operation = operation
         self.integer = integer
+        self.isPreincrement = isPreincrement
         self.isDereferenced = isDereferenced
 
 class instruction:

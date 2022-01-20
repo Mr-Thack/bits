@@ -5,38 +5,26 @@ import registers
 import instructions
 import warnings
 
-"""
-def deparsePreProc(preProc):
-    args = common.condense(preProc.args,", ")
-    args = args[:len(args)-1]
-    # It's in 2 instructions because we need len(args)
-    # and if we try to do that before, we'll get it undefined
-    return "." + preProc.ins + " " + args
+def getPropsFromComp(arg):
+    # Takes the argument to an instruction
+    args = []
+    types = []
+    ret = [args,types]
 
-def translateArgs(dataArray):
-    newDataArray = []
-    for l, line in enumerate(dataArray):
-        if type(line) == common.instruction:
-            argLine = []
-            for a, arg in enumerate(line.args):
-                if arg.argType == common.argTypes.register:
-                    argLine.append(arg)
-                elif arg.argType == common.argTypes.comp:
-                    if type(arg.data) == common.compArgRegPoint:
-                        argLine.append(common.compArgRegPoint(
-                            arg.data.register,
-                            arg.data.operation,
-                            arg.data.pointer,
-                            arg.data.isDereferenced))
-                        print("translator.py : translateArgs() THIS", argLine[len(argLine)-1].register)
-                else:
-                    argLine.append(arg)
-            newDataArray.append(common.instruction(line.ins,argLine))
-        else:
-            newDataArray.append(line)
+    # Basically, this is an alias
+    data = arg.data
 
-    return newDataArray
-"""
+    args.append(data.reg)
+    types.append(common.argTypes.register)
+    if type(data) == common.compArgRegPoint:
+        args.append(data.pointer)
+        types.append(common.argTypes.pointer)
+    elif type(data) == common.compArgRegInt:
+        args.append(data.integer)
+        types.append(common.argTypes.integer)
+    # Returns 2 subarrays
+    # [args,types]
+    return ret
 
 def translateIns(line):
     ret = []
@@ -61,12 +49,15 @@ def translateIns(line):
                             index = int(arg[arg.find("$")+1])
                             # If not found (because -1 is found)
                             if arg.find("@") != -1:
-                                #property is 2nd part
-                                prop = arg.split("@")[1]
+                                sndIndex = int(arg[arg.find("@")+1])
+                                # sndIndex is the 2nd part of the property
+                                # after the @
+                                props = getPropsFromComp(orgargs[index-1])
+
                                 # IF there is an error somewhere around here
                                 # That's because my type checking system is not yet implemented
-                                argType = getattr(common.argTypes,prop)
-                                newArg = common.arguement(getattr(orgargs[index-1].data,prop),argType)
+                                newArg = props[0][sndIndex]
+                                argType = props[1][sndIndex]
                             else:
                                 # Set arg to that index of orgargs
                                 newArg = orgargs[index-1]
@@ -78,7 +69,7 @@ def translateIns(line):
                         # If the newArg is already an argument,
                         # Remove one argument layer wrapper,
                         # and we'll be good to go
-                        warnings.warn("Might be an issue")
+                        warnings.warn("Might be an issue, seems arg inside of arg where shouldn't be")
                         newArg = newArg.data
                     newArgs.append(common.arguement(newArg,argType))
                 ret.append(common.instruction(clause.ins,newArgs))
@@ -89,8 +80,6 @@ def translate(dataArray):
     for l, line in enumerate(dataArray):
         # for line in dataArray, if it's an instruction
         if type(line) == common.instruction:
-            if line.ins == "lea":
-                print(type(line.args[1].data))
             newInstructions = translateIns(line)
 
             # This will return an array
