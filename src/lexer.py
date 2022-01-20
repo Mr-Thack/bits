@@ -28,15 +28,6 @@ def removeCFI(data):
             outputArray.append(line)
     return outputArray
 
-# [BUG] This is a me issue
-# Remove it soon
-def removeInstructionsIDontWant(data):
-    outputArray = []
-    for i, line in enumerate(data):
-        if not line.startswith("nop"):
-            outputArray.append(line)
-    return outputArray
-
 
 def lex(fileData):
     lexedData = fileData
@@ -45,6 +36,5 @@ def lex(fileData):
     lexedData = removeComments(lexedData)
     lexedData = removeWhiteSpace(lexedData)
     lexedData = removeCFI(lexedData)
-    lexedData = removeInstructionsIDontWant(lexedData)
 
     return lexedData

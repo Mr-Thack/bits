@@ -1,4 +1,5 @@
 //0.2. Finish Haskell Translate
-1. Stop it from Crashing
-2. Get translator working again
-3. Make nice documentation
+1. Allow for String + String Replacement (:lo12:)
+2. Figure out what's wrong with x30
+3. Implement register swappery
+4. Make nice documentation

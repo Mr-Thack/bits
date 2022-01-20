@@ -86,6 +86,13 @@ def translate(dataArray):
             # So in the next loop we'll append things onto the newDataArray piece by piece
             for i, ins in enumerate(newInstructions):
                 newDataArray.append(ins)
+        elif type(line) == common.preProc:
+            if line.ins != "byte":
+                newDataArray.append(line)
+        elif type(line) == common.label:
+            newDataArray.append(line)
+        else:
+            print(type(line), "Not working")
 
     return newDataArray
 
