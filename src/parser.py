@@ -84,14 +84,7 @@ def parse(sectData):
                                 if newArgData.find("+"):
                                     newArgData = newArgData.split("+")
                                     register = common.findReg(newArgData[0])
-                                    print("Data is",newArgData[0],result)
                                     if result == None:
-                                        # [BUG] for example QWORD PTR RAX
-                                        # it's stupid and will only take the RAX
-                                        # because we're simple looking for not found
-                                        # We should look for '0'
-                                        # But I'm afraid this might break things
-                                        # Guess I'm trying it anyways
                                         compType = common.argTypes.compArgRegPoint
                                         arg = common.compArgRegPoint(
                                             common.register(newArgData[0]), "+", common.pointer(newArgData[1]), isDereferenced)
@@ -128,9 +121,9 @@ def deparseInstruction(instruct,curArchitecture):
             argLine = argLine + str(arg.data)
         elif arg.argType == common.argTypes.register:
             if curArchitecture == "AMD64":
-                argLine = argLine + str(arg.data.name)
+                argLine = argLine + str(arg.data.reg.name)
             elif curArchitecture == "ARM64":
-                argLine = argLine + str(arg.data.equiv)
+                argLine = argLine + str(arg.data.reg.equiv)
         elif arg.argType == common.argTypes.pointer:
             argLine = argLine + str(arg.data)
         elif arg.argType == common.argTypes.compArgRegPoint or common.argTypes.compArgRegInt:
@@ -144,14 +137,14 @@ def deparseInstruction(instruct,curArchitecture):
             # So a pointer or an integer
 
             if arg.argType == common.argTypes.compArgRegPoint:
-                sndPiece = str(arg.data.pointer)
+                sndPiece = str(arg.data.pointer.name)
             elif arg.argType == common.argTypes.compArgRegInt:
                 sndPiece = str(arg.data.integer)
 
             if curArchitecture == "AMD64":
-                reg = str(arg.data.register.name)
+                reg = str(arg.data.reg.reg.name)
             elif curArchitecture == "ARM64":
-                reg = str(arg.data.register.equiv)
+                reg = str(arg.data.reg.reg.equiv)
 
             if arg.data.isDereferenced == True:
                 extraStartChar = "["

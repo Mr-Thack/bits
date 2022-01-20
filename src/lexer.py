@@ -6,7 +6,7 @@ def removeComments(data):
     for i, line in enumerate(data):
         # Keep only lines that have a comment and end section ...
         if (not line.startswith("#")):
-            if line.find("@"):
+            if not line.startswith(".") and line.find("@"):
                 # I guess the @ is also a comment
                 # Might as well remove it if found
                 outputArray.append(line.split("@")[0])
@@ -33,7 +33,7 @@ def removeCFI(data):
 def removeInstructionsIDontWant(data):
     outputArray = []
     for i, line in enumerate(data):
-        if line.find("nop") == -1:
+        if not line.startswith("nop"):
             outputArray.append(line)
     return outputArray
 

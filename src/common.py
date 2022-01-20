@@ -38,15 +38,15 @@ class register:
 class compArgRegPoint:
     # Operation can be a string of "+", "-", "*", or "/"
     # computeArgument Register Pointer (AKA label such as ".L_2004")
-    def __init__(self,register,operation,pointer,isDereferenced=False):
-        self.register = register
+    def __init__(self,reg,operation,pointer,isDereferenced=False):
+        self.reg = reg
         self.operation = operation
         self.pointer = pointer
         self.isDereferenced = isDereferenced
 
 class compArgRegInt:
-    def __init__(self,register,operation,integer,isDereferenced=False):
-        self.register = register
+    def __init__(self,reg,operation,integer,isDereferenced=False):
+        self.reg = reg
         self.operation = operation
         self.integer = integer
         self.isDereferenced = isDereferenced

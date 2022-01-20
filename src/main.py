@@ -38,10 +38,10 @@ def main(argv):
     parsedData = parser.parse(sectionData[common.sectFind(sectionData,".text")].data)
 
     # Call translate.translate()
-    parsedData = translator.translate(parsedData)
+    #parsedData = translator.translate(parsedData)
 
     # deparse data to output into modified assembly file
-    deParsedData = parser.deparse(parsedData, "ARM64")
+    deParsedData = parser.deparse(parsedData, "AMD64")
     # Change AMD64 to ARM64 to get the ARM version
     sectionData[common.sectFind(sectionData,".text")].data = deParsedData
     # set section .text data as deParsedData
