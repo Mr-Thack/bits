@@ -94,10 +94,10 @@ def parse(sectData):
                             else:
                                 # Must be a pointer or a dereferenced pointer
                                 # AKA a label
-                                newArgPoint = common.arguement(arg, common.argTypes.pointer)
-                                args.append(newArgPoint)
                                 print(arg)
                                 warnings.warn("This might be a new data type: ^ ")
+                                newArgPoint = common.arguement(common.pointer(arg), common.argTypes.pointer)
+                                args.append(newArgPoint)
                 newInstruction = common.instruction(ins,args)
                 parsedData.append(newInstruction)
     return parsedData
@@ -128,7 +128,7 @@ def deparseInstruction(instruct,curArchitecture):
             elif curArchitecture == "ARM64":
                 argLine = argLine + str(arg.data.reg.equiv)
         elif arg.argType == common.argTypes.pointer:
-            argLine = argLine + str(arg.data)
+            argLine = argLine + str(arg.data.name)
         elif arg.argType == common.argTypes.compArgRegPoint or common.argTypes.compArgRegInt:
             # The above classes are quite similar
             # So we can do some similar things to them
