@@ -7,8 +7,9 @@ class reg:
         self.size = size
 
 registers = [
-    reg("RBP","fp",64),
-    reg("ERROR_UNNAMED","x30",64), # ERROR_UNNAMED
+    reg("RBP","fp",64), # fp = x29
+    reg("ERROR_UNNAMED","lr",64), # lr = x30
+    # ERROR_UNNAMED
     # BECAUSE THIS IS TESTING
     # RENAME TO PROPER x86 REGISTER WHEN DONE TESTING
     reg("RSP","sp",64),

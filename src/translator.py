@@ -2,7 +2,7 @@
 
 import common
 import registers
-import instructions
+import translations
 import warnings
 import copy
 
@@ -35,7 +35,7 @@ def translateIns(line):
 
     # Will be an array of instructions
     # These will be derived from the rules
-    for r, rule in enumerate(instructions.instructions):
+    for r, rule in enumerate(translations.instructions):
         # Try to match the instruction to conversion rules
         if line.ins == rule.amd.ins:
             orgargs = line.args

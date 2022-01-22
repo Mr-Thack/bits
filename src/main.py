@@ -8,6 +8,7 @@ import backend
 import sections
 import common
 import parser
+import deparser
 import translator
 import cleanup
 
@@ -31,7 +32,9 @@ def main(argv):
     lexedData = lexer.lex(fileData)
 
     # Then run my trash script on it
+    # This is just for my personal needs
     lexedData = cleanup.cleanlex(lexedData)
+    # It shouldn't be required once this program works properly
 
     # Then use sections to go through and retrieve sect addresses
     sectionData = sections.retrieveSectAddr(lexedData)
@@ -45,11 +48,12 @@ def main(argv):
     parsedData = translator.translate(parsedData)
 
     # deparse data to output into modified assembly file
-    deParsedData = parser.deparse(parsedData, "ARM64")
+    deParsedData = deparser.deparse(parsedData, "ARM64")
     # Change AMD64 to ARM64 to get the ARM version
     sectionData[common.sectFind(sectionData,".text")].data = deParsedData
     # set section .text data as deParsedData
     sectionData = cleanup.removeSectionsIDontWant(sectionData)
+    # This should also not be required once program works properly
 
     # writeFile requires pre stringed data
     files.writeFile(files.files["modFile"], common.sectCondense(sectionData))

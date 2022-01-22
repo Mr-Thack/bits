@@ -122,6 +122,11 @@ def findReg(name):
     return None
 
 def getReg(name):
+    # Shouldn't be used to make a register for an instruction
+    # Or parsing,
+    # Use common.register() instead
+    # Go clean up code
+    # [BUG] Why not tag it too?
     res = findReg(name)
     if res:
         return registers.registers[res-1]
