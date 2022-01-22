@@ -4,6 +4,7 @@ import common
 import registers
 import instructions
 import warnings
+import copy
 
 def getPropsFromComp(arg):
     # Takes the argument to an instruction
@@ -56,12 +57,17 @@ def translateIns(line):
 
                                 # IF there is an error somewhere around here
                                 # That's because my type checking system is not yet implemented
-                                newArg = props[0][sndIndex]
+                                newArg = copy.deepcopy(props[0][sndIndex])
                                 argType = props[1][sndIndex]
                             else:
                                 # Set arg to that index of orgargs
-                                newArg = orgargs[index-1]
+                                newArg = copy.deepcopy(orgargs[index-1])
                                 argType = newArg.argType
+                            if arg.find(":") != -1:
+                                # The reason why we add 2 instead of 1,
+                                # is because 1 is the normal offset, and
+                                # 1 more because we are "shifting" the string by 1
+                                newArg.relocation = arg[arg.find(":"):arg[1:].find(":")+2]
                     else:
                         newArg = arg
                         argType = common.typeToEnum(arg)

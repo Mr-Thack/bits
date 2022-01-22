@@ -8,6 +8,9 @@ class reg:
 
 registers = [
     reg("RBP","fp",64),
+    reg("ERROR_UNNAMED","x30",64), # ERROR_UNNAMED
+    # BECAUSE THIS IS TESTING
+    # RENAME TO PROPER x86 REGISTER WHEN DONE TESTING
     reg("RSP","sp",64),
     reg("RAX","x18",64),
     reg("EAX","w0",32),

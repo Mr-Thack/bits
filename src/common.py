@@ -14,8 +14,9 @@ class label:
         self.name = name
 
 class pointer:
-    def __init__(self,name,isDereferenced=True):
+    def __init__(self,name,relocation="",isDereferenced=True):
         self.name = name
+        self.relocation = relocation
         self.isDereferenced = isDereferenced
 
 class arguement:

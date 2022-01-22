@@ -128,7 +128,7 @@ def deparseInstruction(instruct,curArchitecture):
             elif curArchitecture == "ARM64":
                 argLine = argLine + str(arg.data.reg.equiv)
         elif arg.argType == common.argTypes.pointer:
-            argLine = argLine + str(arg.data.name)
+            argLine = argLine + arg.data.relocation + str(arg.data.name)
         elif arg.argType == common.argTypes.compArgRegPoint or common.argTypes.compArgRegInt:
             # The above classes are quite similar
             # So we can do some similar things to them
